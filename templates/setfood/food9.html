@@ -1,0 +1,419 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Choice</title>
+    <style>
+        body {
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        h1 {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .container {
+            margin-top: 2%;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .question {
+            margin-bottom: 20px;
+        }
+
+        .choices {
+            margin-left: 10px;
+        }
+
+        .divider {
+            border-bottom: 1px solid #ccc;
+            margin: 20px 0;
+        }
+
+        .container p {
+            margin: 0;
+        }
+
+        textarea {
+            width: calc(100% - 20px);
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        input[type="number"] {
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 50px;
+        }
+
+        .submit-button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #fea900;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .submit-button:hover {
+            background-color: #d6571c;
+        }
+
+        h2 {
+            font-family: 'Prompt', sans-serif;
+            font-size: 2em;
+            color: #2C3E50;
+            text-align: center;
+            padding: 10px;
+            background-color: #ECF0F1;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-container {
+            display: none;
+            margin-top: 1px;
+            border: 1px solid #ccc;
+            padding: 100px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            margin-left: 10px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="date"],
+        input[type="time"],
+        select[type="text"],
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            /* ทำให้ช่องกรอกข้อมูลเต็มความกว้าง */
+            padding: 8px;
+            /* เพิ่มระยะห่างภายใน */
+            border: 1px solid #ccc;
+            /* เส้นขอบ */
+            border-radius: 4px;
+            /* มุมโค้ง */
+            box-sizing: border-box;
+            /* รวม padding และ border ในขนาด */
+        }
+
+        button[type="submit"] {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>เซ็ตที่ 9</h1>
+    <div class="container">
+        <form id="food-form">
+            <div class="question" style="display:none;">
+                <div class="choices">
+                    <input id="setfood" name="setfood" value="เซ็ตที่9 ราคา3,500">
+                </div>
+            </div>
+
+            <div class="question">
+                <p>จานที่ 1 : </p>
+                <div class="choices">
+                    <input type="radio" id="food1_1" name="food1" value="ข้าวเกรียบ" checked>
+                    <label for="food1_1">ข้าวเกรียบ</label><br>
+                </div>
+            </div>
+            <div class="divider"></div>
+
+            <div class="question">
+                <p>จานที่ 2 : </p>
+                <div class="choices">
+                    <input type="radio" id="food2_1" name="food2"
+                        value="ออเดิร์ฟ 5 อย่าง (ถั่ว ไข่เยี่ยวม้า ไส้กรอก แฮม หมูแผ่น)" checked>
+                    <label for="food2_1">ออเดิร์ฟ 5 อย่าง (ถั่ว ไข่เยี่ยวม้า ไส้กรอก แฮม หมูแผ่น)</label><br>
+                </div>
+            </div>
+            <div class="divider"></div>
+
+            <div class="question">
+                <p>จานที่ 3 : </p>
+                <div class="choices">
+                    <input type="radio" id="food3_1" name="food3" value="กระเพาะปลาน้ำแดงทรงเครื่อง" checked>
+                    <label for="food3_1">กระเพาะปลาน้ำแดงทรงเครื่อง</label><br>
+                </div>
+            </div>
+            <div class="divider"></div>
+
+            <div class="question">
+                <p>จานที่ 4 : </p>
+                <div class="choices">
+                    <input type="radio" id="food4_1" name="food4" value="ปลาทับทิมทอดยำมะม่วง" checked>
+                    <label for="food4_1">ปลาทับทิมทอดยำมะม่วง</label><br>
+                    <input type="radio" id="food4_2" name="food4" value="ปลาทับทิมสามรส">
+                    <label for="food4_2">ปลาทับทิมสามรส</label><br>
+                    <input type="radio" id="food4_3" name="food4" value="ปลาทับทิมนึ่งมะนาว">
+                    <label for="food4_3">ปลาทับทิมนึ่งมะนาว</label><br>
+                    <input type="radio" id="food4_4" name="food4" value="ปลาทับทิมนึ่งบ๊วย">
+                    <label for="food4_4">ปลาทับทิมนึ่งบ๊วย</label><br>
+                    <input type="radio" id="food4_5" name="food4" value="ปลาทับทิมทอดน้ำปลา">
+                    <label for="food4_5">ปลาทับทิมทอดน้ำปลา</label><br>
+                </div>
+            </div>
+            <div class="divider"></div>
+
+            <div class="question">
+                <p>จานที่ 5 : </p>
+                <div class="choices">
+                    <input type="radio" id="food5_1" name="food5" value="ข้าวผัดปูไส้กรอก" checked>
+                    <label for="food5_1">ข้าวผัดปูไส้กรอก</label><br>
+                    <input type="radio" id="food5_2" name="food5" value="ข้าวผัดปู">
+                    <label for="food5_2">ข้าวผัดปู</label><br>
+                    <input type="radio" id="food5_3" name="food5" value="ข้าวผัดไก่">
+                    <label for="food5_3">ข้าวผัดไก่</label><br>
+                    <input type="radio" id="food5_4" name="food5" value="ข้าวผัดหมู">
+                    <label for="food5_4">ข้าวผัดหมู</label><br>
+                </div>
+            </div>
+            <div class="divider"></div>
+
+            <div class="question">
+                <p>จานที่ 6 : </p>
+                <div class="choices">
+                    <input type="radio" id="food6_1" name="food6" value="ต้มยำทะเลน้ำข้นรวมมิตร" checked>
+                    <label for="food6_1">ต้มยำทะเลน้ำข้นรวมมิตร</label><br>
+                    <input type="radio" id="food6_2" name="food6" value="ขาหมูต้มยำ">
+                    <label for="food6_2">ขาหมูต้มยำ</label><br>
+                    <input type="radio" id="food6_3" name="food6" value="แกงส้มชะอมไข่ทอดใส่กุ้ง">
+                    <label for="food6_3">แกงส้มชะอมไข่ทอดใส่กุ้ง</label><br>
+                </div>
+            </div>
+            <div class="divider"></div>
+
+            <div class="question">
+                <p>จานที่ 7 : </p>
+                <div class="choices">
+                    <input type="radio" id="food7_1" name="food7" value="วุ้นมะพร้าวอ่อน" checked>
+                    <label for="food7_1">วุ้นมะพร้าวอ่อน</label><br>
+                    <input type="radio" id="food7_2" name="food7" value="ข้าวเหนียวเผือก">
+                    <label for="food7_2">ข้าวเหนียวเผือก</label><br>
+                    <input type="radio" id="food7_3" name="food7" value="รวมมิตรไทย">
+                    <label for="food7_3">รวมมิตรไทย</label><br>
+                    <input type="radio" id="food7_4" name="food7" value="เต้าฮวยฟรุตสลัด">
+                    <label for="food7_4">เต้าฮวยฟรุตสลัด</label><br>
+                </div>
+            </div>
+            <div class="divider"></div>
+
+            <div class="question">
+                <p>ชุดน้ำดื่ม : </p>
+                <div class="choices">
+                    <input type="radio" id="drink1" name="drink" value="เจ้าภาพเตรียมชุดน้ำเอง" checked>
+                    <label for="drink1">เจ้าภาพเตรียมชุดน้ำเอง</label><br>
+                    <input type="radio" id="drink2" name="drink"
+                        value="ชุดน้ำดื่มเพิ่ม 250 บาทต่อโต๊ะ (น้ำอัดลม 1 ลิตร 2 ขวด น้ำเปล่า 1.5 ลิตร 2 ขวด โซดาวันเวย์ 4 ขวด น้ำแข็งตลอดงาน) พร้อมบริการเสิร์ฟ">
+                    <label for="drink2">ชุดน้ำดื่มเพิ่ม 250 บาทต่อโต๊ะ (น้ำอัดลม 1 ลิตร 2 ขวด น้ำเปล่า 1.5 ลิตร 2 ขวด
+                        โซดาวันเวย์ 4 ขวด น้ำแข็งตลอดงาน) พร้อมบริการเสิร์ฟ</label><br>
+                    <input type="radio" id="drink3" name="drink"
+                        value="ชุดน้ำดื่มเพิ่ม 250 บาทต่อโต๊ะ ไม่มีแอลกอฮอล์ (น้ำอัดลม 1 ลิตร 3 ขวด น้ำเปล่า 1.5 ลิตร 2 ขวด น้ำแข็งตลอดงาน) พร้อมบริการเสิร์ฟ">
+                    <label for="drink3">ชุดน้ำดื่มเพิ่ม 250 บาทต่อโต๊ะ ไม่มีแอลกอฮอล์ (น้ำอัดลม 1 ลิตร 3 ขวด น้ำเปล่า
+                        1.5 ลิตร 2
+                        ขวด น้ำแข็งตลอดงาน) พร้อมบริการเสิร์ฟ</label><br>
+                    <input type="radio" id="drink4" name="drink"
+                        value="สั่งชุดน้ำดื่มเพิ่ม 350 บาทต่อโต๊ะ ไม่มีแอลกอฮอล์ (น้ำอัดลม 1 ลิตร 5 ขวด น้ำเปล่า 1.5 ลิตร 3 ขวด น้ำแข็งตลอดงาน) พร้อมบริการเสิร์ฟ">
+                    <label for="drink4">สั่งชุดน้ำดื่มเพิ่ม 350 บาทต่อโต๊ะ ไม่มีแอลกอฮอล์ (น้ำอัดลม 1 ลิตร 5 ขวด
+                        น้ำเปล่า 1.5
+                        ลิตร 3 ขวด น้ำแข็งตลอดงาน) พร้อมบริการเสิร์ฟ</label><br>
+                    <input type="radio" id="drink5" name="drink"
+                        value="สั่งชุดน้ำดื่มเพิ่ม 350 บาทต่อโต๊ะ (น้ำอัดลม 1 ลิตร 4 ขวด น้ำเปล่า 1.5 ลิตร 3 ขวด โซดา 6 ขวด น้ำแข็งตลอดงาน) พร้อมบริการเสิร์ฟ">
+                    <label for="drink5">สั่งชุดน้ำดื่มเพิ่ม 350 บาทต่อโต๊ะ (น้ำอัดลม 1 ลิตร 4 ขวด น้ำเปล่า 1.5 ลิตร 3
+                        ขวด โซดา 6
+                        ขวด น้ำแข็งตลอดงาน) พร้อมบริการเสิร์ฟ</label><br>
+                </div>
+            </div>
+            <div class="divider"></div>
+
+
+            <div class="question">
+                <p>เด็กเสิร์ฟ : </p>
+                <div class="choices">
+                    <input type="radio" id="waiter1" name="waiter" value="ไม่ใช้บริการเด็กเสิร์ฟ" checked>
+                    <label for="waiter1">ไม่ใช้บริการเด็กเสิร์ฟ</label><br>
+                    <input type="radio" id="waiter2" name="waiter"
+                        value="ใช้บริการเด็กเสริฟน้ำทางร้าน 30 บาท/โต๊ะ (สั่งน้ำดื่มกับทางร้านชุดนี้ไม่ต้องเลือก)">
+                    <label for="waiter2">ใช้บริการเด็กเสริฟน้ำทางร้าน 30 บาท/โต๊ะ
+                        (สั่งน้ำดื่มกับทางร้านชุดนี้ไม่ต้องเลือก)</label><br>
+                    <input type="radio" id="waiter3" name="waiter"
+                        value="ใช้บริการเด็กชงน้ำทางร้าน 150 บาท/โต๊ะ (เสิร์ฟเหมือนโรงแรม มีบาร์ให้)">
+                    <label for="waiter3">ใช้บริการเด็กชงน้ำทางร้าน 150 บาท/โต๊ะ (เสิร์ฟเหมือนโรงแรม
+                        มีบาร์ให้)</label><br>
+                </div>
+            </div>
+            <div class="submit-button" id="confirm-btn">ถัดไป</div>
+        </form>
+    </div>
+
+    <div class="form-container">
+        <h2>กรุณาตรวจสอบข้อมูลส่วนตัวให้ถูกต้องก่อนทำการจอง</h2>
+        <form id="confirmation-form">
+            <div class="form-group">
+                <label for="nickname">ชื่อของคุณ</label>
+                <input type="text" id="nickname" name="nickname" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">เบอร์โทรติดต่อ</label>
+                <input type="number" id="phone" name="phone" required>
+            </div>
+            <div class="form-group">
+                <label for="address">สถานที่จัดงาน</label>
+                <input type="text" id="address" name="address" required>
+            </div>
+            <div class="form-group">
+                <label for="event-date">วันที่จัดงาน:</label>
+                <input type="date" id="event-date" name="event-date" required>
+            </div>
+
+            <div class="form-group">
+                <label for="start-time">เวลาที่เริ่มทาน:(นาทีมีให้เลือกแค่ 00,15,30,45 หากเลือกนอกเหนือนี้จะถูกเปลี่ยนกลับอัตโนมัติ)</label>
+                <input type="time" id="start-time" name="start-time" required>
+            </div>
+
+            <div class="form-group">
+                <label for="event-size">ขนาดของงาน:</label>
+                <select type="text" id="event-size" name="event-size" required>
+                    <option value="ขนาดเล็ก">ขนาดเล็ก</option>
+                    <option value="ขนาดกลาง">ขนาดกลาง</option>
+                    <option value="ขนาดใหญ่">ขนาดใหญ่</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="attendees">จำนวนผู้ร่วมงาน:</label>
+                <input type="number" id="attendees" name="attendees" min="1" required>
+            </div>
+            <button type="submit">ส่งข้อมูล</button>
+        </form>
+    </div>
+
+    <script>
+        const startTimeInput = document.getElementById('start-time');
+
+        startTimeInput.addEventListener('change', function () {
+            const timeValue = startTimeInput.value;
+            if (timeValue) {
+                const [hours, minutes] = timeValue.split(':').map(Number);
+                const roundedMinutes = Math.round(minutes / 15) * 15; // ปัดเศษให้เป็น 15 นาที
+                const adjustedHours = roundedMinutes === 60 ? (hours + 1) % 24 : hours;
+
+                startTimeInput.value = `${String(adjustedHours).padStart(2, '0')}:${String(roundedMinutes).padStart(2, '0')}`;
+            }
+        });
+
+
+        document.getElementById('confirm-btn').addEventListener('click', function () {
+            const formData = new FormData(document.getElementById('food-form'));
+            const data = {
+                setfood: formData.get('setfood'),
+                food1: formData.get('food1'),
+                food2: formData.get('food2'),
+                food3: formData.get('food3'),
+                food4: formData.get('food4'),
+                food5: formData.get('food5'),
+                food6: formData.get('food6'),
+                food7: formData.get('food7'),
+                drink: formData.get('drink'),
+                waiter: formData.get('waiter')
+            };
+
+            // ซ่อนฟอร์มอาหาร
+            document.querySelector('.container').style.display = 'none';
+            // แสดงฟอร์มยืนยัน
+            document.querySelector('.form-container').style.display = 'block';
+
+            // เก็บข้อมูลใน localStorage
+            localStorage.setItem('reservationData', JSON.stringify(data));
+        });
+
+        document.getElementById('confirmation-form').addEventListener('submit', function (event) {
+            event.preventDefault(); // ป้องกันการรีเฟรชหน้า
+
+            const confirmationFormData = new FormData(this);
+            const reservationData = JSON.parse(localStorage.getItem('reservationData'));
+
+            const finalData = {
+                ...reservationData,
+                eventDate: confirmationFormData.get('event-date'),
+                startTime: confirmationFormData.get('start-time'),
+                eventSize: confirmationFormData.get('event-size'),
+                attendees: confirmationFormData.get('attendees'),
+                nickname: confirmationFormData.get('nickname'),
+                address: confirmationFormData.get('address'),
+                phone: confirmationFormData.get('phone')
+            };
+
+            fetch('/api/menu', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(finalData)
+            })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        alert('การจองโต๊ะสำเร็จ!');
+                    } else {
+                        alert('การจองสำเร็จ:');
+                        window.location = "/check"
+                    }
+                })
+                .catch(error => {
+                    console.error('เกิดข้อผิดพลาดในการส่งข้อมูล:', error);
+                    alert('ไม่สามารถส่งข้อมูลได้');
+                });
+        });
+    </script>
+</body>
+
+</html>
+{% endblock %}

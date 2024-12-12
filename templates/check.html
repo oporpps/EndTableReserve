@@ -1,0 +1,70 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<style>
+    .input-group {
+        display: flex;
+        align-items: center;
+    }
+    
+    .input-group .form-control {
+        flex: 1;
+        margin-right: 10px; /* เว้นระยะห่างระหว่างปุ่มและช่องกรอกข้อมูล */
+    }
+    
+    .input-group .btn-primary {
+        height: 40px; /* ให้ความสูงเท่ากับ input */
+    }
+</style>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <!-- <h2 class="mb-4">ตรวจสอบรายการ</h2>
+        <form id="checkphone">
+            <div class="input-group">
+                <input type="text" class="form-control" id="checkphone" name="checkphone" placeholder="ใส่เบอร์โทรศัพท์" required>
+                <button type="submit" class="btn btn-primary">ค้นหา</button>
+            </div>
+        </form> -->
+
+        <hr class="mt-5">
+
+        <h4 class="mb-4">รายการจองทั้งหมด</h4>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>วันที่จัดงาน</th>
+                    <th>เวลาที่เริ่มทาน</th>
+                    <th>ขนาดของงาน</th>
+                    <th>จำนวนผู้ร่วมงาน</th>
+                    <th>รายการอาหาร"เซ็ต" ที่จอง</th>
+                </tr>
+            </thead>
+            {% for m in menu %}
+            <tbody>
+                <tr>
+                    <td>{{ m.eventDate | date('d/m/Y') }}</td>
+                    <td>{{m.startTime}} น.</td>
+                    <td>{{m.eventSize}}</td>
+                    <td>{{m.attendees}} คน</td>
+                    <td>{{m.setfood}} บาท</td>
+                </tr>
+            </tbody>
+            {% endfor %}
+        </table>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+    </script>
+</body>
+</html>
+{% endblock %}

@@ -1,0 +1,113 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navbar Example</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #881616;
+            padding: 10px 20px;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 14px 20px;
+        }
+        .navbar a:hover,
+        .navbar a.active {
+            background-color: #ffd000;
+            color: black;
+        }
+        .navbar .logo {
+            color: white;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        .navbar .menu {
+            display: flex;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">
+            นุ่นโภชนา โต๊ะจีน
+        </div>
+        <div class="menu">
+            {% if not isLoggin %}
+            <a href="/" class="nav-link">ยินดีต้อนรับ</a>
+            <a href="/login" class="nav-link">เข้าสู่ระบบ</a>
+            <a href="https://www.facebook.com/profile.php?id=100013881244187&locale=th_TH" class="nav-link">ติดต่อเรา</a>
+            {% endif %}
+            
+            {% if isLoggin %}
+            <a href="/menu" class="nav-link">รายการโต๊ะจีน</a>
+            <!-- <a href="/profile" class="nav-link">ข้อมูลส่วนตัว</a> -->
+            <!-- <a href="/confirm" class="nav-link">ยืนยันการจอง</a> -->
+            {% if role == "user" %}
+            <a href="/check" class="nav-link">ตรวจสอบรายการ</a>
+            {% endif %}
+            {% if role == "admin" %}
+            <a href="/admin" class="nav-link">สำหรับAdmin</a>
+            <a href="/create" class="nav-link">สร้างเมนู</a>
+            <a href="/menu_edit" class="nav-link">แก้ไขหรือลบเมนู</a>
+            {% endif %}
+            <a href="#" class="nav-link" id="logoutNavItem">ออกจากระบบ</a>
+            <a href="https://www.facebook.com/profile.php?id=100013881244187&locale=th_TH" class="nav-link">ติดต่อเรา</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs/build/css/alertify.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs/build/css/themes/default.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/alertifyjs/build/alertify.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var links = document.querySelectorAll('.navbar .nav-link');
+            links.forEach(function (link) {
+                link.addEventListener('click', function () {
+                    localStorage.setItem('activeLink', this.getAttribute('href'));
+                });
+
+                if (link.getAttribute('href') === localStorage.getItem('activeLink')) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const logoutNavItem = document.getElementById("logoutNavItem");
+        
+            if (logoutNavItem) {
+                logoutNavItem.addEventListener("click", async () => {
+                    try {
+                        alertify.confirm("คุณต้องการออกจากระบบหรือไม่?", async function () {
+        
+                            const response = await fetch("/api/logout", {
+                                method: "GET",
+                            });
+        
+                            if (response.ok) {
+                                alertify.success('คุณได้ออกจากระบบเรียบร้อยแล้ว', 1, () => {
+                                    location.reload();
+                                });
+                            }
+                        }, function () {
+                            alertify.error('ยกเลิกการออกจากระบบ');
+                        });
+        
+                    } catch (error) {
+                        alert(error.message);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

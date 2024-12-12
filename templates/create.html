@@ -1,0 +1,190 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สร้างข้อมูลอาหาร</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        
+        form {
+            margin-left: 550px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 400px; /* กำหนดความกว้างของฟอร์ม */
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%; /* ทำให้ปุ่มกว้างเต็มฟอร์ม */
+        }
+        
+        button:hover {
+            background-color: #45a049;
+
+        }
+        h1,h2 {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<h1>สร้างข้อมูลอาหาร</h1>
+
+<!-- ฟอร์มสำหรับสร้างข้อมูล foodset -->
+<h2>สร้างเซ็ต</h2>
+<form id="foodsetForm">
+    <label for="nameset">ชื่อเซ็ต:</label>
+    <input type="text" id="nameset" name="nameset" required>
+
+    <label for="info">ข้อมูลเซ็ต:</label>
+    <textarea id="info" name="info" required></textarea>
+
+    <label for="link">ลิงก์ภาพเซ็ต:</label>
+    <input type="text" id="link" name="link" required>
+
+    <label for="price">ราคา:</label>
+    <input type="text" id="price" name="price" required>
+
+    <button type="button" onclick="submitForm()">สร้างเซ็ต</button>
+</form>
+
+<!-- ฟอร์มสำหรับสร้างข้อมูล menu_items -->
+<h2>สร้างลำดับจานอาหาร</h2>
+<form id="menuItemForm">
+    <label for="foodset_id">ID ของเซ็ต</label>
+    <input type="number" id="foodset_id" name="foodset_id" required>
+    
+    <label for="menu_item_name">ชื่อจาน:</label>
+    <input type="text" id="menu_item_name" name="name" required>
+    
+    <button type="button" onclick="submitMenuItemForm()">สร้างลำดับจาน</button>
+</form>
+
+<!-- ฟอร์มสำหรับสร้างข้อมูล menu_choices -->
+<h2>สร้างเมนูอาหาร</h2>
+<form id="menuChoiceForm">
+    <label for="foodset_id_choice">ID ของเซ็ต:</label>
+    <input type="number" id="foodset_id_choice" name="foodset_id" required>
+
+    <label for="menu_item_id">ID ของจาน:</label>
+    <input type="number" id="menu_item_id" name="menu_item_id" required>
+
+    <label for="choice">ชื่อเมนูอาหาร:</label>
+    <input type="text" id="choice" name="choice" required>
+
+    <button type="button" onclick="submitMenuChoiceForm()">สร้างเมนูอาหาร</button>
+</form>
+
+</body>
+</html>
+<script>
+    function submitForm() {
+        // รับค่าจากฟอร์ม
+        const formData = {
+            nameset: document.getElementById('nameset').value,
+            info: document.getElementById('info').value,
+            link: document.getElementById('link').value,
+            price: document.getElementById('price').value
+        };
+    
+        // ส่งข้อมูลเป็น JSON
+        fetch('/api/sdfoodset', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Response:', data);
+            alert('บันทึกสำเร็จ');
+            window.location.href = '/menu'; 
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('เกิดข้อผิดพลาด');
+        });
+    }
+    function submitMenuItemForm() {
+        // รับข้อมูลจากฟอร์ม
+        const formData = {
+            name: document.getElementById('menu_item_name').value,
+            foodset_id: document.getElementById('foodset_id').value
+        };
+    
+        // ส่งข้อมูลเป็น JSON
+        fetch('/api/sdmenu', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Response:', data);
+            alert('บันทึกเมนูสำเร็จ');
+            window.location.href = '/menu';
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('เกิดข้อผิดพลาด');
+        });
+    }
+    function submitMenuChoiceForm() {
+        // เก็บข้อมูลจากฟอร์ม
+        const formData = {
+            menu_item_id: document.getElementById('menu_item_id').value,
+            foodset_id: document.getElementById('foodset_id_choice').value,
+            choice: document.getElementById('choice').value
+        };
+    
+        // ส่งข้อมูลเป็น JSON
+        fetch('/api/sdchoice', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Response:', data);
+            alert('บันทึกตัวเลือกสำเร็จ');
+            window.location.href = '/menu';
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('เกิดข้อผิดพลาด');
+        });
+    }
+    </script>
+{% endblock %}

@@ -1,0 +1,98 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        h2 {
+            color: #881616;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-container {
+            margin-top: 3%;
+            margin-left: 30%;
+            max-width: 600px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #881616;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #881616;
+        }
+
+        h1 {
+            font-family: 'Prompt', sans-serif; /* เลือกฟอนต์ที่ดูเป็นทางการและทันสมัย */
+            font-size: 2.5em; /* ขนาดของข้อความ */
+            color: #2C3E50; /* สีข้อความเป็นโทนเข้ม */
+            text-align: center; /* จัดข้อความให้อยู่ตรงกลาง */
+            margin-top: 20px; /* เพิ่มระยะห่างด้านบน */
+            padding: 10px; /* ระยะห่างภายใน */
+            background-color: #ECF0F1; /* สีพื้นหลัง */
+            border-radius: 8px; /* มุมโค้ง */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* เงาเบาๆ ใต้กล่อง */
+        }
+    </style>
+    <h1>กรุณาตรวจสอบข้อมูลส่วนตัวให้ถูกต้องก่อนทำการจอง</h1>
+    <div class="form-container">
+        <h2>ยืนยันการจอง</h2>
+        <form>
+            <div class="form-group">
+                <label for="event-date">วันที่จัดงาน:</label>
+                <input type="date" id="event-date" name="event-date" required>
+            </div>
+
+            <div class="form-group">
+                <label for="start-time">เวลาที่เริ่มทาน:</label>
+                <input type="time" id="start-time" name="start-time" required>
+            </div>
+
+            <div class="form-group">
+                <label for="event-size">ขนาดของงาน:</label>
+                <input type="text" id="event-size" name="event-size" placeholder="เช่น ขนาดเล็ก, ขนาดกลาง, ขนาดใหญ่" required>
+            </div>
+
+            <div class="form-group">
+                <label for="attendees">จำนวนผู้ร่วมงาน:</label>
+                <input type="number" id="attendees" name="attendees" min="1" required>
+            </div>
+            <button type="submit">ส่งข้อมูล</button>
+        </form>
+    </div>
+{% endblock %}

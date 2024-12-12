@@ -1,0 +1,139 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<style>
+    .input-group {
+        display: flex;
+        align-items: center;
+    }
+
+    .input-group .form-control {
+        flex: 1;
+        margin-right: 10px;
+    }
+
+    .input-group .btn-primary {
+        height: 40px;
+    }
+
+    .action-btns {
+        display: flex;
+        justify-content: center;
+        gap: 5px;
+    }
+
+    .action-btns form {
+        margin: 0;
+    }
+
+    .action-btns .btn {
+        padding: 5px 10px;
+        font-size: 12px;
+    }
+
+    table th, table td {
+        text-align: center;
+        vertical-align: middle;
+    }
+</style>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h4 class="mb-4">แก้ไขรายการจองของลูกค้า</h4>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>ชื่อ</th>
+                        <th>เบอร์</th>
+                        <th>สถานที่จัดงาน</th>
+                        <th>วันที่จัดงาน</th>
+                        <th>เวลาที่เริ่มทาน</th>
+                        <th>ขนาดของงาน</th>
+                        <th>จำนวนผู้ร่วมงาน</th>
+                        <th>รายการอาหาร "เซ็ต" ที่จอง</th>
+                        <th>สถานะ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for m in menu %}
+                    <tr>
+                        <td><input type="text" class="form-control" name="user_id" value="{{m.user_id}}" readonly></td>
+                        <td><input type="text" class="form-control" name="nickname" value="{{m.nickname}}" id="nickname_{{m.id}}"></td>
+                        <td><input type="text" class="form-control" name="phone" value="{{m.phone}}" id="phone_{{m.id}}"></td>
+                        <td><input type="text" class="form-control" name="address" value="{{m.address}}" id="address_{{m.id}}"></td>
+                        <td><input type="date" class="form-control" name="eventDate" value="{{m.eventDate | date('Y-m-d')}}" id="eventDate_{{m.id}}"></td>
+                        <td><input type="time" class="form-control" name="startTime" value="{{m.startTime}}" id="startTime_{{m.id}}"></td>
+                        <td><input type="text" class="form-control" name="eventSize" value="{{m.eventSize}}" id="eventSize_{{m.id}}"></td>
+                        <td><input type="number" class="form-control" name="attendees" value="{{m.attendees}}" id="attendees_{{m.id}}"></td>
+                        <td><input type="text" class="form-control" name="setfood" value="{{m.setfood}}" id="setfood_{{m.id}}"></td>
+                        <td class="action-btns">
+                            <button type="button" class="btn btn-success btn-sm" onclick="updateReservation('{{m.id}}')">ตกลง</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+<script>
+    async function updateReservation(id) {
+        const nicknameElement = document.getElementById(`nickname_${id}`);
+        const phoneElement = document.getElementById(`phone_${id}`);
+        // ตรวจสอบการเข้าถึงฟิลด์
+        console.log(nicknameElement, phoneElement); // ควรแสดงผลไม่เป็น null
+    
+        if (!nicknameElement || !phoneElement) {
+            alert("ไม่พบฟิลด์ที่ต้องการแก้ไข ตรวจสอบโค้ด HTML และการสร้าง ID");
+            return;
+        }
+    
+        const profileData = {
+            user_id: id,
+            nickname: nicknameElement.value,
+            phone: phoneElement.value,
+            address: document.getElementById(`address_${id}`).value,
+            eventDate: document.getElementById(`eventDate_${id}`).value,
+            startTime: document.getElementById(`startTime_${id}`).value,
+            eventSize: document.getElementById(`eventSize_${id}`).value,
+            attendees: document.getElementById(`attendees_${id}`).value,
+            setfood: document.getElementById(`setfood_${id}`).value,
+        };
+    
+        try {
+            const response = await fetch('/api/update', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(profileData)
+            });
+            if (response.ok) {
+                alert('อัพเดทเรียบร้อย');
+                window.location.href = '/admin'
+            } else {
+                const errorData = await response.json();
+                alert(`ไม่สามารถอัพเดทข้อมูลได้: ${errorData.message || 'ไม่ทราบข้อผิดพลาด'}`);
+                location.reload();
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert(`เกิดข้อผิดพลาดในการอัพเดทข้อมูล: ${error.message}`);
+        }
+    }
+</script>
+{% endblock %}

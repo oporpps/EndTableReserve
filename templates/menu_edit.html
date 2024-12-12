@@ -1,0 +1,210 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="foodset-table-container">
+    <!-- Foodset Table -->
+    <div class="table-wrapper">
+        <h2>ข้อมูลเซ็ต</h2>
+        <table class="foodset-table">
+            <thead>
+                <tr>
+                    <th>IDของเซ็ต</th>
+                    <th>ชื่อเซ็ต</th>
+                    <th>รายละเอียด</th>
+                    <th>ราคา</th>
+                    <th>การจัดการ</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in show %}   
+                <tr>
+                    <td>ID: {{ i.id }}</td>
+                    <td>{{ i.nameset }}</td>
+                    <td>{{ i.info }}</td>
+                    <td>{{ i.price }}</td>
+                    <td>
+                        <button class="delete-btn" onclick="deleteSet('{{ i.id }}')">ลบ</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Menu Table -->
+    <div class="table-wrapper">
+        <h2>ข้อมูลจาน</h2>
+        <table class="menu-table">
+            <thead>
+                <tr>
+                    <th>IDของจาน</th>
+                    <th>เซ็ตที่จะเพิ่ม</th>
+                    <th>ชื่อ</th>
+                    <th>การจัดการ</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for t in item %}   
+                <tr>
+                    <td>ID: {{ t.id }}</td>
+                    <td>{{ t.foodset_id }}</td>
+                    <td>{{ t.name }}</td>
+                    <td>
+                        <button class="delete-btn" onclick="deleteItem('{{ t.id }}')">ลบ</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Choice Table -->
+    <div class="table-wrapper">
+        <h2>ข้อมูลเมนู</h2>
+        <table class="choice-table">
+            <thead>
+                <tr>
+                    <th>IDของชื่อเมนู</th>
+                    <th>เซ็ตที่จะเพิ่ม</th>
+                    <th>จานที่จะเพิ่ม</th>
+                    <th>ชื่อเมนู</th>
+                    <th>การจัดการ</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in choices %}   
+                <tr>
+                    <td>ID: {{ i.id }}</td>
+                    <td>{{ i.foodset_id }}</td>
+                    <td>{{ i. menu_item_id }}</td>
+                    <td>{{ i.choice }}</td>
+                    <td>
+                        <button class="delete-btn" onclick="deleteChoice('{{ i.id }}')">ลบ</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    async function deleteSet(id) {
+        if (confirm("กดตกลงเพื่อลบเซ็ตอาหารนี้")) {
+            try {
+                let response = await fetch('/api/deleteset', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id })
+                });
+                if (response.ok) {
+                    alert('ลบเซ็ตอาหารเรียบร้อย');
+                    location.reload();
+                } else {
+                    alert('ลบเซ็ตอาหารล้มเหลว');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('เกิดข้อผิดพลาดในการลบเซ็ตอาหาร');
+            }
+        }
+    }
+
+    async function deleteItem(id) {
+        if (confirm("กดตกลงเพื่อลบเมนูนี้")) {
+            try {
+                let response = await fetch('/api/deletemenu', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id })
+                });
+                if (response.ok) {
+                    alert('ลบเมนูเรียบร้อย');
+                    location.reload();
+                } else {
+                    alert('ลบเมนูล้มเหลว');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('เกิดข้อผิดพลาดในการลบเมนู');
+            }
+        }
+    }
+
+    async function deleteChoice(id) {
+        if (confirm("กดตกลงเพื่อลบตัวเลือกนี้")) {
+            try {
+                let response = await fetch('/api/deletechoice', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id })
+                });
+                if (response.ok) {
+                    alert('ลบตัวเลือกเรียบร้อย');
+                    location.reload();
+                } else {
+                    alert('ลบตัวเลือกล้มเหลว');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('เกิดข้อผิดพลาดในการลบตัวเลือก');
+            }
+        }
+    }
+</script>
+
+<style>
+    /* สไตล์ตาราง */
+    .foodset-table-container {
+        margin: 20px auto;
+        max-width: 800px;
+    }
+
+    .foodset-table,
+    .menu-table,
+    .choice-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px; /* เพิ่มระยะห่างระหว่างตาราง */
+    }
+
+    .foodset-table th,
+    .menu-table th,
+    .choice-table th,
+    .foodset-table td,
+    .menu-table td,
+    .choice-table td {
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        text-align: center;
+    }
+
+    .foodset-table th,
+    .menu-table th,
+    .choice-table th {
+        background-color: #f4f4f4;
+        font-weight: bold;
+    }
+
+    /* ปุ่มลบ */
+    .delete-btn {
+        background-color: #e74c3c;
+        color: #fff;
+        padding: 8px 12px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .delete-btn:hover {
+        background-color: #c0392b;
+    }
+</style>
+{% endblock %}

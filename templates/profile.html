@@ -1,0 +1,182 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ข้อมูลส่วนตัว</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #AA1919;
+        }
+        .content-container {
+            display: flex;
+            justify-content: center;
+            padding: 50px 0;
+        }
+        .settings-container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 60%;
+            padding: 20px 40px;
+        }
+        .settings-header {
+            border-bottom: 1px solid #eaeaea;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .settings-header h1 {
+            color: #333;
+            font-size: 24px;
+            margin: 0;
+        }
+        .settings-section {
+            margin-bottom: 20px;
+        }
+        .settings-section h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .settings-section p {
+            font-size: 16px;
+            color: #666;
+            margin: 5px 0;
+        }
+        .settings-section .edit-button {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 16px;
+            font-size: 14px;
+            color: #ffffff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .settings-section .edit-button:hover {
+            background-color: #0056b3;
+        }
+        .settings-section .edit-form {
+            display: none;
+        }
+        .settings-section .edit-form input {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-top: 5px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .settings-section .edit-form .save-button {
+            background-color: #28a745;
+            margin-right: 10px;
+        }
+        .settings-section .edit-form .cancel-button {
+            background-color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="content-container">
+        <div class="settings-container">
+            <div class="settings-header">
+                <h1>ข้อมูลส่วนตัว</h1>
+            </div>
+            <div class="settings-section">
+                <h2>ชื่อผู้ใช้</h2>
+                <p id="nickname-display">{{profile.nickname}}</p>
+                <a href="#" class="edit-button" onclick="toggleEditForm('nickname')">แก้ไข</a>
+                <form class="edit-form" id="nickname-form" onsubmit="saveChanges('nickname', event)">
+                    <input type="text" id="nickname-input" placeholder="ชื่อของคุณ">
+                    <button type="submit" class="save-button edit-button">บันทึก</button>
+                    <button type="button" class="cancel-button edit-button" onclick="toggleEditForm('nickname')">ยกเลิก</button>
+                </form>
+            </div>
+            <div class="settings-section">
+                <h2>รหัสผ่าน</h2>
+                <p id="address-display">{{profile.address}}</p>
+                <a href="#" class="edit-button" onclick="toggleEditForm('address')">แก้ไข</a>
+                <form class="edit-form" id="address-form" onsubmit="saveChanges('address', event)">
+                    <input type="text" id="address-input" placeholder="ที่อยู่ของคุณ">
+                    <button type="submit" class="save-button edit-button">บันทึก</button>
+                    <button type="button" class="cancel-button edit-button" onclick="toggleEditForm('address')">ยกเลิก</button>
+                </form>
+            </div>
+            <div class="settings-section">
+                <h2>เบอร์โทรศัพท์</h2>
+                <p id="phone-display">{{profile.phone}}</p>
+                <!-- <a href="#" class="edit-button" onclick="toggleEditForm('phone')">แก้ไข</a> -->
+                <form class="edit-form" id="phone-form" onsubmit="saveChanges('phone', event)">
+                    <input type="text" id="phone-input" placeholder="เบอร์โทรศัพท์ของคุณ">
+                    <button type="submit" class="save-button edit-button">บันทึก</button>
+                    <button type="button" class="cancel-button edit-button" onclick="toggleEditForm('phone')">ยกเลิก</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+<script>
+    let profileData = {
+        nickname: "{{profile.nickname}}",
+        address: "{{profile.address}}"
+        <!-- phone: "{{profile.phone}}" -->
+    };
+    
+    function toggleEditForm(section) {
+        const displayElement = document.getElementById(`${section}-display`);
+        const formElement = document.getElementById(`${section}-form`);
+        if (formElement.style.display === 'none' || formElement.style.display === '') {
+            displayElement.style.display = 'none';
+            formElement.style.display = 'block';
+            document.getElementById(`${section}-input`).value = displayElement.textContent;
+        } else {
+            displayElement.style.display = 'block';
+            formElement.style.display = 'none';
+        }
+    }
+    
+    function saveChanges(section, event) {
+        event.preventDefault();
+        const inputElement = document.getElementById(`${section}-input`);
+        const value = inputElement.value;
+    
+        // อัปเดต profileData ตามฟิลด์ที่แก้ไข
+        profileData[section] = value;
+    
+        // ส่ง profileData ทั้งหมดเมื่อบันทึก
+        fetch('/api/updateProfile', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(profileData)
+        }).then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error('Something went wrong');
+            }
+        }).then(data => {
+            if (data.success) {
+                // อัปเดตการแสดงผลหลังจากบันทึกสำเร็จ
+                document.getElementById(`${section}-display`).textContent = value;
+                toggleEditForm(section);
+            } else {
+                alert('Failed to update profile');
+            }
+        }).catch(error => {
+            alert(error.message);
+        });
+    }
+</script>
+
+{% endblock %}
